@@ -1,4 +1,4 @@
-const socketClient = io('http://0.0.0.0:233/', {
+const socketClient = io('http://192.168.1.6:520/', {
   reconnection: false
 }); //发起连接
 const dp = new DPlayer({
@@ -16,7 +16,7 @@ const dp = new DPlayer({
   },
   video: {
     url: 'https://10848.vcdn.pplive.cn/37850f6d3dc4c60ca25d60ceaa372f9f.mp4?type=tv.android&w=1&k=6e42ef9b186ea02abcfa1fe63e8cf0f2-8f31-1589905420%26segment%3D86e6663d_86e66711_1589891020%26bppcataid%3D94',
-    type: 'hls',
+    type: 'auto',
   }
 });
 socketClient.emit('init');
@@ -33,4 +33,8 @@ socketClient.on("set_time",(data)=>{
 socketClient.on("set_danmu",(data)=>{
   console.log(data)
   dp.danmaku.draw(data);
+})
+socketClient.on("update_user_num",(data)=>{
+  let user_num_dom = document.getElementById('user_num')
+  user_num_dom.textContent = data
 })

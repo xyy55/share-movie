@@ -16,8 +16,13 @@ let start_time = ''
 
 io.on('connection', function (socket) {
   socket.on("init", function (data) {
-    console.log(Object.keys(io.sockets.sockets).length)
+    let user_num = Object.keys(io.sockets.sockets).length
+    console.log(user_num)
     socket.emit('connected');
+    for(let i in io.sockets.sockets){
+      soc = io.sockets.sockets[i]
+      soc.emit("update_user_num",user_num)
+    }
   });
   socket.on("play",()=>{
     let time = new Date().getTime()
@@ -34,6 +39,15 @@ io.on('connection', function (socket) {
       soc = io.sockets.sockets[i]
       if(soc != socket){
         soc.emit("set_danmu",data)
+      }
+    }
+  })
+  socket.on('disconnect',()=>{
+    let user_num = Object.keys(io.sockets.sockets).length
+    for(let i in io.sockets.sockets){
+      soc = io.sockets.sockets[i]
+      if(soc != socket){
+        soc.emit("update_user_num",user_num)
       }
     }
   })
